@@ -1,0 +1,17 @@
+# Path to log file
+log_file_path:
+
+# ----- Thermometer Evaluation Values -----
+# Classification names for Thermometer sensors based on the maximum allowed standard deviation of its readings
+# from the reference temperature
+thermometer_sensor_classification:
+  max_std_dev:
+    ultra_precise: 3.0
+    very_precise: 5.0
+  mean_range_from_reference: 0.5
+
+# ----- Humidity Sensor Evaluation Values -----
+# Classification based on the maximum percent difference from the reference humidity
+humidity_sensor_classification:
+  max_percent_difference:
+    keep: 1.0
