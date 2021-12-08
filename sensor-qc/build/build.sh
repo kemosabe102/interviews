@@ -5,7 +5,7 @@ appName='sensor-qc'
 buildContainerImage() {
   # By default, the image tag used in the Helm deployment is the same as the value for `appVersion`
   local imageTag
-  imageTag=$(grep 'appVersion' "./deploy/${appName}/Chart.yaml" | awk -F \" '{print $2}')
+  imageTag=$(grep 'appVersion' "./deploy/Chart.yaml" | awk -F \" '{print $2}')
 
   docker build . -t "${appName}:${imageTag}"
 }

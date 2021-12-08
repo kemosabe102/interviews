@@ -1,19 +1,25 @@
-apiVersion: batch/v1
-kind: Job
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: {{ include "sensor-qc.fullname" . }}
   labels:
     {{- include "sensor-qc.labels" . | nindent 4 }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "sensor-qc.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
-        "helm.sh/hook-delete-policy": before-hook-creation
       {{- end }}
+      labels:
+        {{- include "sensor-qc.selectorLabels" . | nindent 8 }}
     spec:
-      restartPolicy: Never
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -29,19 +35,9 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: LOG_FILE_PATH
-              value: {{ .Values.env.logFilePath }}
-          volumeMounts:
-            - name: log-file
-              mountPath: /files
+              value: {{ include .Values.env.LOG_FILE_PATH }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-      volumes:
-        - name: log-file
-          configMap:
-            name: log-file
-            items:
-              - key: logs.txt
-                path: logs.txt
       {{- with .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}

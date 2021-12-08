@@ -1,6 +1,8 @@
 # Default values for sensor-qc.
 env:
-  LOG_FILE_PATH: /app/logs.txt
+  logFilePath: /files/logs.txt
+
+replicaCount: 1
 
 image:
   repository: sensor-qc
@@ -33,6 +35,13 @@ securityContext:
    readOnlyRootFilesystem: true
    runAsNonRoot: true
    runAsUser: 1000
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
 
 # This app can only run on Linux nodes
 affinity:
