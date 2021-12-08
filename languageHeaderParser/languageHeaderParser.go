@@ -1,4 +1,4 @@
-package interviews
+package languageHeaderParser
 
 import "strings"
 

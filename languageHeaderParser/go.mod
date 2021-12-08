@@ -1,4 +1,4 @@
-module interviews
+module languageHeaderParser
 
 go 1.17
 
