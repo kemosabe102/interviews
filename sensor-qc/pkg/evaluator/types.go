@@ -15,7 +15,7 @@ type ReferenceData struct {
 // SensorQualityControlLogs contains the device logs from the quality control test
 type SensorQualityControlLogs struct {
 	SensorInfo SensorInformation
-	SensorLogs []SensorReadings
+	SensorLogs []SensorReading
 }
 
 // SensorInformation contains details about the device
@@ -24,8 +24,8 @@ type SensorInformation struct {
 	SensorName string
 }
 
-// SensorReadings is a single device log that contains the datetime and a reading from the device
-type SensorReadings struct {
+// SensorReading is a single device log that contains the datetime and a reading from the device
+type SensorReading struct {
 	DateTime  string
 	Result    float64
 }

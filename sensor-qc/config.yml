@@ -1,5 +1,5 @@
 # Path to log file
-log_file_path:
+log_file_path: "./pkg/evaluator/testLogs.txt"
 
 # ----- Thermometer Evaluation Values -----
 # Classification names for Thermometer sensors based on the maximum allowed standard deviation of its readings

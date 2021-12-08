@@ -20,17 +20,15 @@ var (
 
 func init() {
 	flag.StringVar(&configFilePath, "conf", defaultConfigFilePath, configFilePathUsage)
-
 	flag.Parse()
+
+	viper.AutomaticEnv()
 }
 
 func main() {
-	viper.AutomaticEnv()
-	logFilePath := viper.GetString("log_file_path")
-
 	NewConfig(configFilePath)
 
-	parsedLogs, err := evaluator.ParseLogFile(logFilePath)
+	parsedLogs, err := evaluator.ParseLogFile(viper.GetString("log_file_path"))
 	if err != nil {
 		log.Fatal(err)
 	}

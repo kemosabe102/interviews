@@ -17,7 +17,7 @@ RUN go mod download
 COPY . ./
 
 # Build the binary.
-RUN go build -v -o sensor-qc
+RUN GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o sensor-qc
 
 # Use the official Debian slim image for a lean production container.
 # https://hub.docker.com/_/debian
@@ -29,9 +29,8 @@ RUN set -x && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -
 # Create and change to the app directory.
 WORKDIR /app
 
-# Copy the binary to the production image from the builder stage.
+# Copy the binary and config file to the production image from the builder stage.
 COPY --from=builder /app/sensor-qc /app/sensor-qc
 COPY --from=builder /app/config.yml /app/config.yml
-COPY --from=builder /app/logs.txt /logs/logs.txt
 
 CMD ["/app/sensor-qc"]

@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// ParseLogFile scans each line of the log file then records reference data and parses sensor readings by sensor
+// ParseLogFile scans each line of the log file then records reference data and parses the sensor's info and readings
 func ParseLogFile(logFilePath string) (ParsedLogFile, error) {
 	file, err := os.Open(logFilePath)
 	if err != nil {
@@ -19,7 +19,6 @@ func ParseLogFile(logFilePath string) (ParsedLogFile, error) {
 	var parsedLogs ParsedLogFile
 	var sensorInfoAndLogs SensorQualityControlLogs
 
-	deviceKey := 0
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		lineContent := strings.Split(scanner.Text(), " ")
@@ -31,11 +30,10 @@ func ParseLogFile(logFilePath string) (ParsedLogFile, error) {
 			if len(sensorInfoAndLogs.SensorInfo.SensorName) > 0 {
 				parsedLogs.Logs = append(parsedLogs.Logs, sensorInfoAndLogs)
 			}
-			deviceKey++
 			sensorInfoAndLogs = SensorQualityControlLogs{}
 			sensorInfoAndLogs.SensorInfo = parseSensorInfo(lineContent)
 		default:
-			sensorInfoAndLogs.SensorLogs = append(sensorInfoAndLogs.SensorLogs, parseSensorLog(lineContent))
+			sensorInfoAndLogs.SensorLogs = append(sensorInfoAndLogs.SensorLogs, parseSensorReading(lineContent))
 		}
 	}
 	if err := scanner.Err(); err != nil {
@@ -71,13 +69,13 @@ func parseSensorInfo(line []string) SensorInformation {
 	}
 }
 
-func parseSensorLog(line []string) SensorReadings {
+func parseSensorReading(line []string) SensorReading {
 	reading, err := strconv.ParseFloat(line[1], 64)
 	if err != nil {
 		log.Println(err)
 	}
 
-	return SensorReadings{
+	return SensorReading{
 		DateTime:  line[0],
 		Result:    reading,
 	}
