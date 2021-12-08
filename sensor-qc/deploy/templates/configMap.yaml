@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: log-file
+data:
+  {{ (.Files.Glob "files/logs.txt").AsConfig | indent 2 }}
