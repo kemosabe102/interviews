@@ -18,12 +18,15 @@ func LoadConfig() grep.SearchInput {
 	)
 
 	if filePath == "" {
-		filePath = getFilePathFromUserInput()
+		filePath = strings.Replace(getFilePathFromUserInput(), "\"", "", -1)
 	}
-	checkFilePathExists(os.Getenv("FILEPATH"))
+	checkFilePathExists(filePath)
 
 	if pattern == "" {
 		pattern = getPatternFromUserInput()
+		if pattern == "" {
+			panic(fmt.Errorf("pattern needs to be provided"))
+		}
 	}
 
 	return grep.SearchInput{
@@ -71,6 +74,6 @@ func getPatternFromUserInput() string {
 // checkFilePathExists asserts that the chosen value exists on the local file system by panicking if it doesn't
 func checkFilePathExists(fp string) {
 	if _, err := os.Stat(fp); os.IsNotExist(err) {
-		panic(fmt.Errorf("chosen option %s does not exist", fp))
+		panic(fmt.Errorf("file path %s does not exist", fp))
 	}
 }

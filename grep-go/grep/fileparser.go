@@ -2,6 +2,7 @@ package grep
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -11,7 +12,7 @@ import (
 func SearchFile(searchInput *SearchInput) (LinesFound, error) {
 	file, err := os.Open(searchInput.FilePath)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("SearchFile failed with: %v", err)
 	}
 	defer file.Close()
 
@@ -21,6 +22,7 @@ func SearchFile(searchInput *SearchInput) (LinesFound, error) {
 	for scanner.Scan() {
 		if strings.Contains(scanner.Text(), searchInput.Pattern) {
 			linesFound.LinesWithPattern = append(linesFound.LinesWithPattern, scanner.Text())
+			fmt.Println(scanner.Text())
 		}
 	}
 	if err := scanner.Err(); err != nil {
